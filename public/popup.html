@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Email Magic: SendShield</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 350px;
+      min-height: 500px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .header {
+      padding: 20px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .shield-icon {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .content {
+      padding: 20px;
+    }
+
+    .status-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .status-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .status-label {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .toggle {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .toggle.active {
+      background: #10b981;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+
+    .toggle.active .toggle-slider {
+      transform: translateX(20px);
+    }
+
+    .delay-setting {
+      margin-bottom: 20px;
+    }
+
+    .delay-label {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .delay-value {
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .delay-slider {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+      outline: none;
+      margin-bottom: 12px;
+    }
+
+    .delay-presets {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .preset-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .preset-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .preset-btn.active {
+      background: white;
+      color: #667eea;
+    }
+
+    .stats {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .stats-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .stat-value {
+      font-weight: 600;
+    }
+
+    .footer {
+      padding: 0 20px 20px;
+      text-align: center;
+    }
+
+    .settings-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+      width: 100%;
+    }
+
+    .settings-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">
+      <svg class="shield-icon" viewBox="0 0 24 24">
+        <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7A2,2 0 0,1 14,9A2,2 0 0,1 12,11A2,2 0 0,1 10,9A2,2 0 0,1 12,7Z"/>
+      </svg>
+      <div class="title">SendShield</div>
+    </div>
+    <div class="subtitle">Email Magic Protection</div>
+  </div>
+
+  <div class="content">
+    <div class="status-card">
+      <div class="status-header">
+        <div class="status-label">Protection Status</div>
+        <div class="toggle" id="protectionToggle">
+          <div class="toggle-slider"></div>
+        </div>
+      </div>
+      <div id="statusText">Active - All emails protected</div>
+    </div>
+
+    <div class="delay-setting">
+      <div class="delay-label">Delay Duration</div>
+      <div class="delay-value" id="delayValue">60s</div>
+      <input type="range" class="delay-slider" id="delaySlider" min="5" max="300" step="5" value="60">
+      
+      <div class="delay-presets">
+        <button class="preset-btn" data-value="15">15s</button>
+        <button class="preset-btn active" data-value="60">1m</button>
+        <button class="preset-btn" data-value="120">2m</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stats-title">Today's Stats</div>
+      <div class="stat-row">
+        <span>Emails Protected</span>
+        <span class="stat-value" id="emailsProtected">0</span>
+      </div>
+      <div class="stat-row">
+        <span>Mistakes Prevented</span>
+        <span class="stat-value" id="mistakesPrevented">0</span>
+      </div>
+      <div class="stat-row">
+        <span>Success Rate</span>
+        <span class="stat-value" id="successRate">100%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <button class="settings-btn" id="openSettings">
+      Advanced Settings
+    </button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
